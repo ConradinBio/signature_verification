@@ -150,7 +150,7 @@ print("range of acceptance:",mean-variance,mean+variance)
 
 
 
-################################
+################################ SANDBOX##########
 mean_sig1_f1 = sum(signatures_training_normalized[0][:,0])/len(signatures_training_normalized[0][:,0])
 square_differences = np.array(signatures_training_normalized[0][:,0])
 square_differences = mean_sig1_f1-square_differences

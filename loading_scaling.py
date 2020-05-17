@@ -128,3 +128,50 @@ all_features_at_time_0 = signature_1[0,:]
 
 ## iterate over all signatures in the test dataset:
 ## check the function normalize_signatures() and change the function inside
+
+#####################DTW###################
+from fastdtw import fastdtw
+from scipy.spatial.distance import euclidean
+from tqdm import tqdm
+
+#calculate the variance within one user of his 5 signatures
+
+distance_matrix = np.zeros(shape=(5,5))
+for i in range(5):
+    for j in range(5):
+        distance_matrix[i,j]= fastdtw(signatures_training_normalized[j],signatures_training_normalized[i],dist=euclidean)[0]
+distance_matrix = np.unique(distance_matrix)[1:] #removes all lower half of the array and the 0
+mean=np.mean(distance_matrix)
+variance = np.sum(np.sqrt(np.abs(mean-distance_matrix)))/10
+print(variance,mean)
+print("range of acceptance:",mean-variance,mean+variance)
+
+
+
+
+
+################################
+mean_sig1_f1 = sum(signatures_training_normalized[0][:,0])/len(signatures_training_normalized[0][:,0])
+square_differences = np.array(signatures_training_normalized[0][:,0])
+square_differences = mean_sig1_f1-square_differences
+variance_sig1_f1 =sum(np.abs(square_differences)**(1/2))/len(signatures_training_normalized[0][:,0])
+
+# running DTW
+
+for test_signature in signatures_test_normalized:
+
+distance_matrix = np.zeros(shape=(1350,5))
+#computes dissimilarity between user 1 and all of the verification signatures
+for i in tqdm(range(1350)):
+    for j in range(5):
+        distance_matrix[i,j]= fastdtw(signatures_training_normalized[j],signatures_test_normalized[i],dist=euclidean)[0]
+
+min_vals_user1 = []   
+for i in distance_matrix:
+    min_vals_user1.append(min(i))    
+
+combined_user1_results = {}
+j=0
+for i in min_vals_user1:
+    combined_user1_results[i] = gt[j]
+    j+= 1

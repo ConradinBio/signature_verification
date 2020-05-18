@@ -130,48 +130,75 @@ all_features_at_time_0 = signature_1[0,:]
 ## check the function normalize_signatures() and change the function inside
 
 #####################DTW###################
+
+
 from fastdtw import fastdtw
 from scipy.spatial.distance import euclidean
 from tqdm import tqdm
 
 #calculate the variance within one user of his 5 signatures
+#create a dictionary where key i user and value are the 5 signatures
+def variance_dict(users,signatures_training_normalized):
+    print("calculating variance of users signatures")
+    variance_dict = {}
+    for i in range(1,len(users)+1):
+        variance_dict[i]=0
+    d = 1
+    for user in tqdm(range(1,31)):  
+        distance_matrix = np.zeros(shape=(5,5))
+        user_sigs = signatures_training_normalized[d-1:d+4]
+        for i in range(5):
+            for j in range(5):
+                distance_matrix[i,j]= fastdtw(user_sigs[j],user_sigs[i],dist=euclidean)[0]
+        #print(distance_matrix)
+        distance_matrix = np.unique(distance_matrix)[1:] #removes all lower half of the array and the 0
+        mean=np.mean(distance_matrix)
+        variance = np.sum(np.sqrt(np.abs(mean-distance_matrix)))/10
+        variance_dict[user]=[mean,variance]
+        d = d+5
+        #print(mean,variance)
+    return(variance_dict)
 
-distance_matrix = np.zeros(shape=(5,5))
-for i in range(5):
-    for j in range(5):
-        distance_matrix[i,j]= fastdtw(signatures_training_normalized[j],signatures_training_normalized[i],dist=euclidean)[0]
-distance_matrix = np.unique(distance_matrix)[1:] #removes all lower half of the array and the 0
-mean=np.mean(distance_matrix)
-variance = np.sum(np.sqrt(np.abs(mean-distance_matrix)))/10
-print(variance,mean)
-print("range of acceptance:",mean-variance,mean+variance)
 
 
+def create_distances(signatures_training_normalized,signatures_test_normalized)
+    #create dictionary that contains the distances of the enrollment to the verification signatures
+    d=1 #just two counters to iterate through the list of the test/training signatures in slices
+    e=0 #should have used slicing now that i think about it
+    distance_dict = {}
+    for user in tqdm(range(1,31)):
+        user_sigs = signatures_training_normalized[d-1:d+4]
+        d+=5
+        verification_sigs = signatures_test_normalized[e:e+45]
+        e+=46
+        best_lst = []
+        
+        for i in verification_sigs:
+            distances = []
+            for j in user_sigs:
+                distance = fastdtw(i, j,dist=euclidean)[0]
+                distances.append(distance)
+            best_lst.append(min(distances))
+        #print(len(best_lst))
+        distance_dict[user]=best_lst
+        
+    return distance_dict
+
+#pickling the results as the distance measuring takes time
+def pickling(dictionary):
+    import pickle
+    print("dumping features in binary file...")
+    with open("distance_dict_pickled.bin", "wb") as dictionary_file:
+        pickle.dump(distance_dict, dictionary_file)
+    print("finished dumping")
 
 
-
-################################ SANDBOX##########
-mean_sig1_f1 = sum(signatures_training_normalized[0][:,0])/len(signatures_training_normalized[0][:,0])
-square_differences = np.array(signatures_training_normalized[0][:,0])
-square_differences = mean_sig1_f1-square_differences
-variance_sig1_f1 =sum(np.abs(square_differences)**(1/2))/len(signatures_training_normalized[0][:,0])
-
-# running DTW
-
-for test_signature in signatures_test_normalized:
-
-distance_matrix = np.zeros(shape=(1350,5))
-#computes dissimilarity between user 1 and all of the verification signatures
-for i in tqdm(range(1350)):
-    for j in range(5):
-        distance_matrix[i,j]= fastdtw(signatures_training_normalized[j],signatures_test_normalized[i],dist=euclidean)[0]
-
-min_vals_user1 = []   
-for i in distance_matrix:
-    min_vals_user1.append(min(i))    
-
-combined_user1_results = {}
-j=0
-for i in min_vals_user1:
-    combined_user1_results[i] = gt[j]
-    j+= 1
+############################# run functions to get the two dictionarys that are used for the evaluation
+var_dict = variance_dict(users, signatures_training_normalized)
+distance_dict = create_distances(signatures_training_normalized,signatures_test_normalized)
+#pickling(distance_dict)
+#reloading the data from the distance_dict_pickled file
+dictionary_file = open('distance_dict_pickled.bin', 'rb')  # reading mode
+distance_dict = pickle.load(dictionary_file)
+dictionary_file.close()
+# for tomorrow : add signature labels f or g to each signature and add the variance normalisation

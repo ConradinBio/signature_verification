@@ -4,6 +4,18 @@ import tools.signature_data_preprocessing_cuba as preprocessor
 import tools.dtw_cuba as dtw
 import tools.evaluation_verificator_cuba as verificator
 
+"""
+I switched the arrays to dictionaries so we can iterate through them using the user-labels (001 - 030)
+
+    the structure of the signature feature data dictionaries looks like this:
+        dict = {"001": [signature_feature_array_1 ... signature_feature_array_N, "002": [singature_feature_array_1 ...
+    
+    
+    the dtw dissimilarity array has following structure:
+        dict = {"001": np.array([[e0v0, e1v0, e2v0, e3v0, e4v0, e5v0]  , "002": np.array([[e0v0, e1v0, e2v0, e3v0...
+                                                    ....                                                     ....
+                                 [e0vN, e1vN, e2vN, e3vN, e4vN, e5vN]]                    [e0vN, e1vN, e2vN, e3vN...
+"""
 
 if __name__ == '__main__':
 

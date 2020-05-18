@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     # dtw time, get the 1st standard deviation quantiles for the dissimilarities within users!
     print("\n", "Calculating variance and mean within users")
-    dict_ignore, dict_also_ignore, dict_1sd_intervals = dtw.calculate_variance_within_users(dict_enrollment_norm)
+    dict_mean, dict_variance, dict_1sd_intervals = dtw.calculate_variance_within_users(dict_enrollment_norm)
 
     # now get the dissimilarity indices between all enrollment signatures and their verification signatures!
     print("\n", "Calculating dissimilarities between datasets")
@@ -44,6 +44,9 @@ if __name__ == '__main__':
     """ ### this chapter deals with the evaluation of our dtw data ### """
 
     # WIP todo @evaluation team
+
+    # Something i tried, more for testing and demonstration, if you look into the output folder you will see that
+    # this is absolutely not an appropriate classifier
 
     # find true positives and true negatives: 2 conditions
     #  1. verification signatures that have all 5 dissimilarity scores in an interval that fits inside 1 SD

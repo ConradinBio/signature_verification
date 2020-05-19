@@ -36,7 +36,7 @@ def build_sorted_list(dict_only_smallest_score_normalized):
 
             dict_scores_as_keys[signature_score] = [user, index_verification_signature]
 
-    assert len(dict_scores_as_keys) == 1350, " 2 exact same distances, fatal error"
+    assert len(dict_scores_as_keys) == 1350, " data contains 2 equal dissimilarity scores, unable to fetch gt labels"
 
     # now we need to build a big list with all min(scores) from all users and sort it in ascending fashion
     list_smallest_scores_all_users = []

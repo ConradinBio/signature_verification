@@ -128,3 +128,77 @@ all_features_at_time_0 = signature_1[0,:]
 
 ## iterate over all signatures in the test dataset:
 ## check the function normalize_signatures() and change the function inside
+
+#####################DTW###################
+
+
+from fastdtw import fastdtw
+from scipy.spatial.distance import euclidean
+from tqdm import tqdm
+
+#calculate the variance within one user of his 5 signatures
+#create a dictionary where key i user and value are the 5 signatures
+def variance_dict(users,signatures_training_normalized):
+    variance_dict = {}
+    for i in range(1,len(users)+1):
+        variance_dict[i]=0
+    d = 1
+    for user in tqdm(range(1,31)):  
+        distance_matrix = np.zeros(shape=(5,5))
+        user_sigs = signatures_training_normalized[d-1:d+4]
+        for i in range(5):
+            for j in range(5):
+                distance_matrix[i,j]= fastdtw(user_sigs[j],user_sigs[i],dist=euclidean)[0]
+        #print(distance_matrix)
+        distance_matrix = np.unique(distance_matrix)[1:] #removes all lower half of the array and the 0
+        mean=np.mean(distance_matrix)
+        variance = np.sum(np.sqrt(np.abs(mean-distance_matrix)))/10
+        variance_dict[user]=[mean,variance]
+        d = d+5
+        #print(mean,variance)
+    return(variance_dict)
+
+def create_distances(signatures_training_normalized,signatures_test_normalized):
+    #create dictionary that contains the distances of the enrollment to the verification signatures
+    d=1 #just two counters to iterate through the list of the test/training signatures in slices
+    e=0 #should have used slicing now that i think about it
+    distance_dict = {}
+    for user in tqdm(range(1,31)):
+        user_sigs = signatures_training_normalized[d-1:d+4]
+        d+=5
+        verification_sigs = signatures_test_normalized[e:e+45]
+        e+=45
+        best_lst = []
+        
+        for i in verification_sigs:
+            distances = []
+            for j in user_sigs:
+                distance = fastdtw(i, j,dist=euclidean)[0]
+                distances.append(distance)
+            best_lst.append(min(distances))
+        #print(len(best_lst))
+        distance_dict[user]=best_lst
+        
+    return distance_dict
+
+#pickling the results as the distance measuring takes time
+def pickling(dictionary, filename):
+    import pickle
+    with open(filename+".bin", "wb") as dictionary_file:
+        pickle.dump(dictionary, dictionary_file)
+
+#### run functions to get the two dictionarys that are used for creating the ranked list
+
+var_dict = variance_dict(users, signatures_training_normalized)
+distance_dict = create_distances(signatures_training_normalized,signatures_test_normalized)
+pickling(distance_dict,"distance_dict_pickled")
+pickling(var_dict,"variance_dict_pickled")
+
+
+
+
+
+
+
+
+

@@ -139,7 +139,6 @@ from tqdm import tqdm
 #calculate the variance within one user of his 5 signatures
 #create a dictionary where key i user and value are the 5 signatures
 def variance_dict(users,signatures_training_normalized):
-    print("calculating variance of users signatures")
     variance_dict = {}
     for i in range(1,len(users)+1):
         variance_dict[i]=0
@@ -159,9 +158,8 @@ def variance_dict(users,signatures_training_normalized):
         #print(mean,variance)
     return(variance_dict)
 
-
-
-def create_distances(signatures_training_normalized,signatures_test_normalized)
+def create_distances(signatures_training_normalized,signatures_test_normalized):
+    from tqdm import tqdm
     #create dictionary that contains the distances of the enrollment to the verification signatures
     d=1 #just two counters to iterate through the list of the test/training signatures in slices
     e=0 #should have used slicing now that i think about it
@@ -170,7 +168,7 @@ def create_distances(signatures_training_normalized,signatures_test_normalized)
         user_sigs = signatures_training_normalized[d-1:d+4]
         d+=5
         verification_sigs = signatures_test_normalized[e:e+45]
-        e+=46
+        e+=45
         best_lst = []
         
         for i in verification_sigs:
@@ -185,20 +183,63 @@ def create_distances(signatures_training_normalized,signatures_test_normalized)
     return distance_dict
 
 #pickling the results as the distance measuring takes time
-def pickling(dictionary):
+def pickling(dictionary, filename):
     import pickle
     print("dumping features in binary file...")
-    with open("distance_dict_pickled.bin", "wb") as dictionary_file:
-        pickle.dump(distance_dict, dictionary_file)
+    with open(filename+".bin", "wb") as dictionary_file:
+        pickle.dump(dictionary, dictionary_file)
     print("finished dumping")
 
-
 ############################# run functions to get the two dictionarys that are used for the evaluation
+
 var_dict = variance_dict(users, signatures_training_normalized)
 distance_dict = create_distances(signatures_training_normalized,signatures_test_normalized)
-#pickling(distance_dict)
+#hier weiter
+pickling(distance_dict,"distance_dict_pickled.bin")
+pickling(var_dict,"variance_dict_pickled")
+
 #reloading the data from the distance_dict_pickled file
 dictionary_file = open('distance_dict_pickled.bin', 'rb')  # reading mode
 distance_dict = pickle.load(dictionary_file)
 dictionary_file.close()
-# for tomorrow : add signature labels f or g to each signature and add the variance normalisation
+
+dictionary_file = open('variance_dict_pickled.bin', 'rb')  # reading mode
+variance_dict = pickle.load(dictionary_file)
+dictionary_file.close()
+
+# normalize the distances so that they can be ranked by distance
+def normalize_distances(distance_dictionary, variance_dictionary):
+    to_be_sorted_lst = []
+    for i in range(1,31):
+        for j in range(45):    
+            to_be_sorted_lst.append(distance_dictionary[i][j]/variance_dictionary[i][0])
+            
+    return to_be_sorted_lst
+
+def create_ranked_lst(lst):
+    for i in range(len(to_be_sorted_lst)):
+        to_be_sorted_lst[i] = (to_be_sorted_lst[i],gt[i])
+    return (sorted(to_be_sorted_lst))
+       
+to_be_sorted_lst=normalize_distances(distance_dict, variance_dict)
+ranked_lst=create_ranked_lst(to_be_sorted_lst)
+
+#pickles the results for evaluation
+with open('DTW_results', 'wb') as fp:
+    pickle.dump(ranked_lst, fp)
+
+# to read i back use the following code
+with open ('DTW_results', 'rb') as fp:
+    ranked_lst = pickle.load(fp)
+
+
+
+
+
+
+
+
+
+
+
+

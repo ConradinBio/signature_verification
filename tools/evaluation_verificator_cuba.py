@@ -33,3 +33,17 @@ def find_nTP_and_nFP_1SD(dict_dissimilarities, dict_1sd_intervals, dict_gt_label
         dict_TPs_FPs[user] = [counter_TP, counter_FP]
 
     return dict_TPs_FPs
+
+
+def build_sorted_labels_list(list_scores_sorted, dict_scores_as_keys, dict_gt_labels):
+
+    list_labels_sorted = []
+
+    for score in list_scores_sorted:
+
+        user = dict_scores_as_keys[score][0]
+        index_verification_image = dict_scores_as_keys[score][1]
+
+        list_labels_sorted.append(dict_gt_labels[user][index_verification_image])
+
+    return list_labels_sorted

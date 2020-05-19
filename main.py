@@ -3,6 +3,8 @@ import tools.signature_data_normalizer_cuba as normalizer
 import tools.signature_data_preprocessing_cuba as preprocessor
 import tools.dtw_cuba as dtw
 import tools.data_pickler_cuba as pickle
+import tools.evaluation_classifier_cuba as classifier
+import tools.evaluation_verificator_cuba as verifier
 
 """
 I switched the arrays to dictionaries so we can iterate through them using the user-labels (001 - 030)
@@ -29,6 +31,7 @@ if __name__ == '__main__':
 
         # Load Data
         dict_raw_enrollment_data, dict_raw_verification_data, dict_gt_labels = reader.read_data("./data/")
+        pickle.save(dict_gt_labels, "dict_gt_labels")
 
         # Process our 7 feature arrays to 5 feature arrays (with awesome new features)
         dict_enrollment_data = preprocessor.preprocess(dict_raw_enrollment_data)
@@ -56,9 +59,27 @@ if __name__ == '__main__':
         dict_variance = pickle.load("dict_variance")
         dict_1sd_intervals = pickle.load("dict_1sd_intervals")
         dict_dissimilarities = pickle.load("dict_dissimilarities")
-
+        dict_gt_labels = pickle.load("dict_gt_labels")
 
     """ ### this chapter deals with the evaluation of our dtw data ### """
 
-    # WIP todo @evaluation team
-    print(dict_dissimilarities)
+    # for each verification signature, only pick the smallest of the 5 dissimilarity scores and normalize it using
+    # it's users mean variance of enrollment signatures
+    dict_normalized_scores = classifier.reduce_to_smallest_normalized_score(dict_dissimilarities, dict_mean)
+
+    # now make a super-list containing all normalized scores from all users, and build a companion dictionary, that
+    # allows us to get the signature user and the signature index for each score.
+    # then sort the super-list in ascending fashion
+    list_scores_sorted, dict_scores_as_keys = classifier.build_sorted_list(dict_normalized_scores)
+
+    # get the labels of the sorted super-list
+    list_labels_sorted = verifier.build_sorted_labels_list(list_scores_sorted, dict_scores_as_keys, dict_gt_labels)
+
+    for score, label in zip(list_scores_sorted, list_labels_sorted):
+        print(score, "is:", label)
+
+    for i in range(len(list_labels_sorted)):
+        label = list_labels_sorted[i]
+        if label == "f":
+            print("first", i - 1, "scores in the list are TP's")
+            break

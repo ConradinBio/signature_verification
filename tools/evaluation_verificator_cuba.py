@@ -1,5 +1,12 @@
 def find_nTP_and_nFP_1SD(dict_dissimilarities, dict_1sd_intervals, dict_gt_labels):
 
+    # Something i tried, more for testing and demonstration, if you look into the output folder you will see that
+    # this is absolutely not an appropriate classifier
+
+    # find true positives and true negatives: 2 conditions
+    #  1. verification signatures that have all 5 dissimilarity scores in an interval that fits inside 1 SD
+    #  2. they have a ground truth (gt.txt) label of "g" for TP's and "t" for FP's
+
     acceptance_threshold = 5  # this means all 5 dissimilarity scores need to be inside 1 standard deviation
 
     dict_TPs_FPs = {}

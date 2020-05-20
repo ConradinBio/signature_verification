@@ -20,4 +20,4 @@ As features we selected:
 [:,4] =  pressure
 ```
 ## Dynamic Time Warping
-The distances for each signature between the enrollment set and the validation set was calculated. Because each signature has different feature lengths, their distances can not be compared across different signatures. Therefore we normalized the distances by dividing each distance by the mean-distance wthin the enrollment. Only the minimal distance for each signature from the verification set to the enrollment set was kept.
+The distances for each signature between the enrollment set and the validation set was calculated by using the fastdtw package. Because each signature has different feature lengths, their distances can not be compared across different signatures. Therefore we normalized the distances by dividing each distance by the mean-distance wthin the enrollment. Only the minimal distance for each signature from the verification set to the enrollment set was kept.

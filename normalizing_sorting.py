@@ -19,8 +19,7 @@ def normalize_distances(distance_dictionary, variance_dictionary):
     to_be_sorted_lst = []
     for i in range(1,31):
         for j in range(45):    
-            to_be_sorted_lst.append(distance_dictionary[i][j]/variance_dictionary[i][0])
-            
+            to_be_sorted_lst.append((abs(distance_dictionary[i][j]-variance_dictionary[i][0]))/variance_dictionary[i][1]**(1/2))      
     return to_be_sorted_lst
 
 def create_ranked_lst(lst):

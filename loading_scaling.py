@@ -152,7 +152,7 @@ def variance_dict(users,signatures_training_normalized):
         #print(distance_matrix)
         distance_matrix = np.unique(distance_matrix)[1:] #removes all lower half of the array and the 0
         mean=np.mean(distance_matrix)
-        variance = np.sum(np.sqrt(np.abs(mean-distance_matrix)))/10
+        variance = np.sum(np.sqrt(np.abs(distance_matrix-mean)))/9
         variance_dict[user]=[mean,variance]
         d = d+5
         #print(mean,variance)

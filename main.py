@@ -74,10 +74,14 @@ if __name__ == '__main__':
 
     # get the labels of the sorted super-list
     list_labels_sorted = verifier.build_sorted_labels_list(list_scores_sorted, dict_scores_as_keys, dict_gt_labels)
+    pickle.save(list_scores_sorted, "list_scores_sorted")
+    pickle.save(list_labels_sorted, "list_labels_sorted")
 
+    # print the sorted list with it's labels
     for score, label in zip(list_scores_sorted, list_labels_sorted):
         print(score, "is:", label)
 
+    # tell how many genuine signatures we find before hitting a forgery
     for i in range(len(list_labels_sorted)):
         label = list_labels_sorted[i]
         if label == "f":

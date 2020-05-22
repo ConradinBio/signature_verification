@@ -1,6 +1,6 @@
 
 
-def reduce_to_smallest_normalized_score(dict_dissimilarity_scores, dict_mean):
+def reduce_to_smallest_normalized_score(dict_dissimilarity_scores, dict_mean, dict_variance):
 
     # create a dictionary containing only the smallest dissimilarities of each of the 5 computed dissimilarities
     # of each verification image for this user
@@ -19,7 +19,7 @@ def reduce_to_smallest_normalized_score(dict_dissimilarity_scores, dict_mean):
     dict_only_smallest_scores_normalized = {}
 
     for user in dict_only_smallest_scores:
-        list_scores_normalized = [score / dict_mean[user] for score in dict_only_smallest_scores[user]]
+        list_scores_normalized = [(score - dict_mean[user]) / dict_variance[user] for score in dict_only_smallest_scores[user]]
         dict_only_smallest_scores_normalized[user] = list_scores_normalized
 
     return dict_only_smallest_scores_normalized

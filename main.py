@@ -42,7 +42,7 @@ if __name__ == '__main__':
 
         """ ### this chapter manages the steps where we actively rely on a dtw algorithm ### """
 
-        # dtw time, get the 1st standard deviation quantiles for the dissimilarities within users!
+        # dtw time, get mean, variance and standard deviation quantile ranges for the dissimilarities within users!
         print("\n", "Calculating variance and mean within users")
         dict_mean, dict_variance, dict_1sd_intervals = dtw.calculate_variance_within_users(dict_enroll_norm)
         pickle.save(dict_mean, "dict_mean")
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     # for each verification signature, only pick the smallest of the 5 dissimilarity scores and normalize it using
     # it's users mean variance of enrollment signatures
-    dict_normalized_scores = classifier.reduce_to_smallest_normalized_score(dict_dissimilarities, dict_mean)
+    dict_normalized_scores = classifier.reduce_to_smallest_normalized_score(dict_dissimilarities, dict_mean, dict_variance)
 
     # now make a super-list containing all normalized scores from all users, and build a companion dictionary, that
     # allows us to get the signature user and the signature index for each score.

@@ -19,14 +19,13 @@ def normalize(dict_enrollment_data, dict_verification_data):
     # Collect all feature data into a single array
     list_enrollment_data = make_list_out_of_all_signatures_in_dict(dict_enrollment_data)
     list_verification_data = make_list_out_of_all_signatures_in_dict(dict_verification_data)
-    list_all_data = list_enrollment_data + list_verification_data
+    list_all_data = list_enrollment_data  # + list_verification_data
 
     # Fit scaler to our data so it can perform the transformation correctly
     """I chose RobustScaler as it is robust to outliers. If it is absolutely necessary that the feature values are 
         contained in the interval [0-1], we can use this function instead:
         scaler = MinMaxScaler().fit(np.vstack(list_all_data))"""
     scaler = RobustScaler().fit(np.vstack(list_all_data))  # vstack appends all values into one large list
-
 
     # print(dict_enrollment_data["001"][0][0])  # to check how the rescaling works, more info in notes
 

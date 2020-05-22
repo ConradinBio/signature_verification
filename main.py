@@ -38,20 +38,20 @@ if __name__ == '__main__':
         dict_verification_data = preprocessor.preprocess(dict_raw_verification_data)
 
         # Normalize values of our arrays for smoother dtw action
-        dict_enrollment_norm, dict_verification_norm = normalizer.normalize(dict_enrollment_data, dict_verification_data)
+        dict_enroll_norm, dict_veri_norm = normalizer.normalize(dict_enrollment_data, dict_verification_data)
 
         """ ### this chapter manages the steps where we actively rely on a dtw algorithm ### """
 
         # dtw time, get the 1st standard deviation quantiles for the dissimilarities within users!
         print("\n", "Calculating variance and mean within users")
-        dict_mean, dict_variance, dict_1sd_intervals = dtw.calculate_variance_within_users(dict_enrollment_norm)
+        dict_mean, dict_variance, dict_1sd_intervals = dtw.calculate_variance_within_users(dict_enroll_norm)
         pickle.save(dict_mean, "dict_mean")
         pickle.save(dict_variance, "dict_variance")
         pickle.save(dict_1sd_intervals, "dict_1sd_intervals")
 
         # now get the dissimilarity indices between all enrollment signatures and their verification signatures!
         print("\n", "Calculating dissimilarities between datasets")
-        dict_dissimilarities = dtw.calculate_dissimilarities_between_datasets(dict_enrollment_norm, dict_verification_norm)
+        dict_dissimilarities = dtw.calculate_dissimilarities_between_datasets(dict_enroll_norm, dict_veri_norm)
         pickle.save(dict_dissimilarities, "dict_dissimilarities")
 
     else:
@@ -77,13 +77,5 @@ if __name__ == '__main__':
     pickle.save(list_scores_sorted, "list_scores_sorted")
     pickle.save(list_labels_sorted, "list_labels_sorted")
 
-    # print the sorted list with it's labels
-    for score, label in zip(list_scores_sorted, list_labels_sorted):
-        print(score, "is:", label)
-
-    # tell how many genuine signatures we find before hitting a forgery
-    for i in range(len(list_labels_sorted)):
-        label = list_labels_sorted[i]
-        if label == "f":
-            print("first", i - 1, "scores in the list are TP's")
-            break
+    # Plot precision/recall curve
+    verifier.show_precision_recall_curve(list_labels_sorted)

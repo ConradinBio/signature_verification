@@ -1,3 +1,6 @@
+from matplotlib import pyplot as plt
+
+
 def find_nTP_and_nFP_1SD(dict_dissimilarities, dict_1sd_intervals, dict_gt_labels):
 
     # Something i tried, more for testing and demonstration, if you look into the output folder you will see that
@@ -47,3 +50,48 @@ def build_sorted_labels_list(list_scores_sorted, dict_scores_as_keys, dict_gt_la
         list_labels_sorted.append(dict_gt_labels[user][index_verification_image])
 
     return list_labels_sorted
+
+
+def sorted_lists_info(list_scores_sorted, list_labels_sorted):
+
+    # print the sorted list with it's labels
+    for score, label in zip(list_scores_sorted, list_labels_sorted):
+        print(score, "is:", label)
+
+    # tell how many genuine signatures we find before hitting a forgery
+    for i in range(len(list_labels_sorted)):
+        label = list_labels_sorted[i]
+        if label == "f":
+            print("first", i - 1, "scores in the list are TP's")
+            break
+
+
+def show_precision_recall_curve(list_labels_sorted):
+
+    # get nP
+    nP = 0
+    for label in list_labels_sorted:
+        if label == "g":
+            nP += 1
+
+    # get precision/recall vectors
+    vector_precision = []
+    vector_recall = []
+
+    nTP = 0
+    nFP = 0
+    for label in list_labels_sorted:
+        if label == "g":
+            nTP += 1
+        else:
+            nFP += 1
+
+        vector_precision.append(nTP / (nTP + nFP))
+        vector_recall.append(nTP / nP)
+
+    # plot vectors
+    plt.plot(vector_recall, vector_precision)
+    plt.xlabel("recall")
+    plt.ylabel("precision")
+    plt.title("Recall-Precision curve/AP ")
+    plt.show()

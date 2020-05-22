@@ -1,10 +1,10 @@
-import tools.signature_data_reader_cuba as reader
-import tools.signature_data_normalizer_cuba as normalizer
-import tools.signature_data_preprocessing_cuba as preprocessor
-import tools.dtw_cuba as dtw
-import tools.data_pickler_cuba as pickle
-import tools.evaluation_classifier_cuba as classifier
-import tools.evaluation_verificator_cuba as verifier
+import tools.signature_data_reader as reader
+import tools.signature_data_normalizer as normalizer
+import tools.signature_data_preprocessing as preprocessor
+import tools.dtw as dtw
+import tools.data_pickler as pickle
+import tools.evaluation_classifier as classifier
+import tools.evaluation_verificator as verifier
 
 """
 I switched the arrays to dictionaries so we can iterate through them using the user-labels (001 - 030)
@@ -72,10 +72,10 @@ if __name__ == '__main__':
     # then sort the super-list in ascending fashion
     list_scores_sorted, dict_scores_as_keys = classifier.build_sorted_list(dict_normalized_scores)
 
-    # get the labels of the sorted super-list
+    # get the labels of the sorted super-list,
     list_labels_sorted = verifier.build_sorted_labels_list(list_scores_sorted, dict_scores_as_keys, dict_gt_labels)
     pickle.save(list_scores_sorted, "list_scores_sorted")
     pickle.save(list_labels_sorted, "list_labels_sorted")
 
     # Plot precision/recall curve
-    verifier.show_precision_recall_curve(list_labels_sorted)
+    verifier.show_evaluation_info_and_plot(list_labels_sorted, list_scores_sorted)

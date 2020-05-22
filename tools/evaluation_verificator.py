@@ -66,7 +66,7 @@ def sorted_lists_info(list_scores_sorted, list_labels_sorted):
             break
 
 
-def show_precision_recall_curve(list_labels_sorted):
+def show_evaluation_info_and_plot(list_labels_sorted, list_scores_sorted):
 
     # get nP
     nP = 0
@@ -88,6 +88,29 @@ def show_precision_recall_curve(list_labels_sorted):
 
         vector_precision.append(nTP / (nTP + nFP))
         vector_recall.append(nTP / nP)
+
+    # tell how many genuine signatures we find before hitting a forgery
+    max_precision_index = 0
+
+    for index in range(len(list_labels_sorted)):
+
+        label = list_labels_sorted[index]
+
+        if label != "g":
+            print("first", index, "scores in the list are TP's")
+            max_precision_index = index - 1
+            break
+
+    # print more info
+    print("In total, there are", len(list_scores_sorted), "dissimilarity scores between signatures")
+
+    print("max precision is maintained through the ", max_precision_index + 1,
+          "smallest scores ,i.e. until a score of", list_scores_sorted[max_precision_index],
+          "standard deviations")
+
+    print("max recall is achieved using the", vector_recall.index(max(vector_recall)),
+          "smallest scores, i.e. until a score of", list_scores_sorted[vector_recall.index(max(vector_recall))],
+          "standard deviations")
 
     # plot vectors
     plt.plot(vector_recall, vector_precision)

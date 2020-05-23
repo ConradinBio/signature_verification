@@ -4,7 +4,7 @@ How you organized your group
 As most of us were unfamiliar with github we first had to get used to it. Once everything was set up we met via conference call several times to discuss the projects and to assign individual tasks. We also tried to exchange regularly and to clarify ambiguities.
 For the first group project (MNIST) we assigned people to each subtask which went very good as we then had a maximum of two people working on a single task and allowed us to work closely together and remove obscurities early on.
 The second group project was larger. We therefore split the task into subtasks. The consequence of this was that everyone had a very narrow focus on a specific task, which turned out to be too narrow - we had trouble keeping an eye on the big picture until the last couple of zoom-meetings. At this point we had already ran out of time to make major adjustments, which would be necessary to improve our results.
-----------------3RD group project organisation here---------------------
+For the third and last group project we started earlier and assigned some tasks twice which was a good idea. we had enough time to finalize our project. 
 
 For each task (MNIST, Keyword Spotting, 3rd group exercise)
   What is special about your solution

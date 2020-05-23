@@ -31,6 +31,8 @@ recall= TP/(TP+FN)
 precision= TP/(TP+FP)
 Those lists were then used to plot the precision recall curve: 
 
+![](./report_figures/precision_recall_curve.png)
+
 The last index at which the precision value was maximal (i.e. =1) +1 told us, how many true positives were found until the first false negative occured. The corresponding distance threshold was extracted from the distance list. 
 Similarly, the first index at which the recall value was maximal (i.e. =1) +1 told us, how many images had to be considered to find all true positives. The corresponding distance threshold was extracted from the distance list. 
 The following was printed by our code:

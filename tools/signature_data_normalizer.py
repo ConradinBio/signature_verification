@@ -19,7 +19,7 @@ def normalize(dict_enrollment_data, dict_verification_data):
     # Collect all feature data into a single array
     list_enrollment_data = make_list_out_of_all_signatures_in_dict(dict_enrollment_data)
     list_verification_data = make_list_out_of_all_signatures_in_dict(dict_verification_data)
-    list_all_data = list_enrollment_data  # + list_verification_data
+    list_all_data = list_enrollment_data + list_verification_data
 
     # Fit scaler to our data so it can perform the transformation correctly
     """I chose RobustScaler as it is robust to outliers. If it is absolutely necessary that the feature values are 

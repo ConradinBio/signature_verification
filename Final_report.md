@@ -15,11 +15,14 @@ For each task (MNIST, Keyword Spotting, 3rd group exercise)
 
 ## Exercise 1: MNIST
 Link to repository and report: [pattern_recognition](https://github.com/hinderling/pattern_recognition)
+
+### SVM
+For this task we used sklearn which provides the svm model. We were supposed to implement one model with a linear kernel and one with an RBF (Radial Basis Function) kernel. The optimal parameters of C and in the RBF case also gamma were estimated using grid search (also provided by sklearn).
+
 ### MLP
 The Multi-layer Perceptron was implemented using the SciKit Library, which also offers nice (visual) comparisons and explenations of different classifiers, which really helped us to get going.
 Special about our solution for the multilayer perceptron was that we did extensive parameter testing by applying a gridsearch. For different parameter combinations we visualized the weights of the hidden neurons, to understand why a particular set of parameters does or does not work well. Visualization helped us a lot to find better parameters - be it in displaying the results of the gridsearch in a heatmap or visualizing the neurons. The shuffling experiments helped us to understand the real-world case of overfitting. Writing an extensive report helped to really understand the functioning of an MLP, and not just apply it.
 
-### SVM
 ### CNN
 A CNN was applied to the full MNIST dataset and the the permutated MNIST dataset.
 Our approach for the CNN implementation was that we first found a [nice tutorial](https://deeplizard.com/learn/video/MasG7tZj-hw) about neural network programming which we both went through in order to understand what we had to do. After that we discussed our notes and went on implementing our CNN together.

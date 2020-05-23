@@ -21,7 +21,9 @@ As features we selected:
 ```
 ## Dynamic Time Warping
 To determine how similar the test-signatures from the validation set are to the 5 corresponding signatures in the enrollment set, we calculated the distances between each of them using the fastdtw package. I.e. we obtained 5 distances per signature in the validation set, from which we only kept the minimal. As signatures from different people vary with different strength, we normalized these distances using the mean and std of the distances of the corresponding ground truth signatures in the enrollment set: 
-(x__i-mean)/std 
+
+(xi-mean)/std 
+
 Note that this will yield a negative value if the min distance between the test-signature and the enrollment set signature is smaller than the mean distance within the 5 signatures in the enrollment set. 
 The obtained distances were stored in a list ("distance list"), the corresponding image name was stored in another list ("name list"), and whether this image showed an original (g) or a forgery (f) again in another list ("ground truth list"). Those lists were then sorted in exactly the same way, namly such that the obtained distances are ordered from smallest to largest. 
 

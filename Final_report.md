@@ -28,9 +28,9 @@ Link to repository and report: [keyword_spotting](https://github.com/hinderling/
 Again the SciKit Library documentation and [examples](https://scikit-learn.org/stable/auto_examples/preprocessing/plot_all_scaling.html) helped us - this time when deciding on a scaler, that we could use to do the data normalization. Visualizing the data pre and post scaling helped us to understand how the data stays the same relatively, and just the axis change - when stretching the scaled x and y pen-position data into the same window as the unstretched data, the two signatures look the same.
 We calculated multiple features (upper/lower contour, nr of black-white transitions, percentage of black pixels, percentage of black pixels in between the upper and lower contour???, center of black pixel mass) for each keyword (only first occurence in the training set?) and for each word in the validation set?. Then we calculated the distance of each feature from a validation set word to the keyword. 
 Evaluation: For each feature, we iteratively added the image with the lowest distance (comprising all distances from all keywords) to the 'hits' and recalculated the recall and precision value. From this, we then drew the recall/precision curve. 
-#### What worked
+#### What worked well
 We were able to calculate distances using dtw and also draw recall/precision curves. 
-#### What not worked
+#### What we could improve
 We did not normalize the features and we calculated a separate recall/precision curve for every feature. This is because we were not aware that the dtw function takes multiple feature vectors as argument. Of course, considering all features together would yield a much better result. 
 
 ## Exercise 3: Signature verification
@@ -38,10 +38,10 @@ We did not normalize the features and we calculated a separate recall/precision 
 #### Approach
 The aim of this project was to tell whether a signature is an original or a forgery based on five features and an enrollment set of 5 original signatures per user. Distances were calculated using fastdtw. First, we calculated the mean distance & its standard deviation among each of the users five original signatures. Then, we calculated the distance between each validation set signature and the corresponding five signatures in the enrollment set; only the minimal distance was kept. This distance was then normalized (xi-mean/std) and ordered from lowest to largest. 
 For the evaluation, we iteratively added the image with the lowest distance to the 'hits' and recalculated the recall and precision value. From this, we then drew the recall/precision curve. 
-#### What worked
+#### What worked well
 This time, we normalized the features and we calculated a recall/precision curve considering all features together. This exercise helped us a lot to clarify the issues we had before, for the Keyword spotting. 
-#### What not worked
+#### What we could improve
 The max distance in std obtained to achieve the max precision was neg. This means that there is one very good forgery in the validation dataset, that varies less from the 5 enrollment originals than those originals vary among each other. Including more features could potentially solve this issue. 
 
 ## General thoughts/feedback about group exercise
-We think that it is very important to have such group exercises, particularly because it forces us to get used to github, which is most valuable for the future. Also, in the 2. exercise, we learned that it is very important to be aware of the big picture, even if everyone is responsible for a small subtask. Generally, group tasks can be a big chance to get a broader view, as the ideas of everyone can be discussed. 
+We think that it is very important to have such group exercises, particularly because it forces us to get used to github, which is most valuable for the future. Implementing classifiers also taught us a lot about other disciplines in pattern recognizion, e.g. feature selection and normlaization. We also improved our strategies to work well in a team, e.g in the 2. exercise, we learned that it is very important to be aware of the big picture, even if everyone is responsible for a small subtask. Generally, group tasks can be a big chance to get a broader view, as the ideas of everyone can be discussed. The special situation forced us to work together without physically meeting. We could adapt quicky to these restrictions and make use of the advantages digital communication can offer - we could hold more regular meetings as it takes less time to meet, and easily explaining code to multiple people by screen sharing.

@@ -1,5 +1,9 @@
 # Signature Verification
 
+## ATTENTION
+During our final testing stages we noticed that data generation does not work on every computer, we were unable to trace back this bug in our code or our project files, so we assume that it has something to do with a Python, or Python-Library version mismatch.
+If you run or code with the Variable: "recompute_data" = True, and the Precision/Recall plot looks different from the one in this Report; please unzip the file: ./tools/pickle/original_pickles.zip, and change "recompute_data" back to False.
+
 ## Feature selection and scaling
 Here we can see two features of a signature, the x and y position of the pen at a given time point (the time dimension is flattened in the plot). We can see the effect of `RobustScaler` by the `sklearn` library. 
 
